@@ -1,0 +1,1 @@
+# zabbix-ossec-hids-server-template
