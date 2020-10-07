@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-10-07T05:16:34Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+        <group>
+            <name>Templates/Applications</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template App OSSEC-HIDS Server</template>
+            <name>Template App OSSEC-HIDS Server</name>
+            <description>OSSEC Server template (Should be linked to OSSEC server)</description>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+                <group>
+                    <name>Templates/Applications</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>OSSEC-HIDS server</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Number of connected OSSEC-HIDS agents</name>
+                    <key>ossec.agents.connected.num</key>
+                    <history>30d</history>
+                    <trends>30d</trends>
+                    <applications>
+                        <application>
+                            <name>OSSEC-HIDS server</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Number of disconnected OSSEC-HIDS agents</name>
+                    <key>ossec.agents.notconnected.num</key>
+                    <history>30d</history>
+                    <trends>30d</trends>
+                    <applications>
+                        <application>
+                            <name>OSSEC-HIDS server</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Total number of OSSEC agents</name>
+                    <key>ossec.agents.total.num</key>
+                    <history>30d</history>
+                    <trends>30d</trends>
+                    <applications>
+                        <application>
+                            <name>OSSEC-HIDS server</name>
+                        </application>
+                    </applications>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>OSSEC-HIDS agents discovery</name>
+                    <key>ossec.agents.discovery</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>State of OSSEC agent {#OSSEC.ID} {#OSSEC.NAME} {#OSSEC.IP}</name>
+                            <key>ossec.agent.status[{#OSSEC.ID}]</key>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>OSSEC-HIDS server</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{regexp(.*Disconnected.*,5m)}=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>{regexp(.*Disconnected.*,5m)}=0</recovery_expression>
+                                    <name>OSSEC Agent disconnected on {#OSSEC.ID}- {#OSSEC.NAME}</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
